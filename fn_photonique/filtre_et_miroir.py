@@ -1,12 +1,9 @@
-"""
-Classe de fonction 
-"""
-
 import numpy as np
 
+#cosinus complexe
 def cos_theta_i(n, n0, theta0):
     
-    z1 = np.sqrt(1-(n0/n*np.sin(theta0))^2)    
+    z1 = np.sqrt(1-(n0/np.real(n)*np.sin(theta0))**2)    
     resultat = z1
     ncos = n*z1
     
@@ -45,6 +42,7 @@ def tp(n1, n2, n0, theta0):
     
     return (2*n1*costheta1)/(n1*costheta2+n2*costheta1)
 
+#Transmittance
 def T(pol, n1, n2, n0, theta0):
     
     t12s = ts(n1,n2,n0,theta0)
@@ -53,9 +51,7 @@ def T(pol, n1, n2, n0, theta0):
     r12p = rp(n1,n2,n0,theta0)
 
     if pol == 1:
-        return 1/t12s*[[1, r12s],[r12s, 1]]
+        return [[(1/(t12s))*1, (1/(t12s))*r12s],[(1/(t12s))*r12s, (1/(t12s))*1]]
 
     else:
-        return 1/t12p*[[1, r12p],[r12p, 1]]
-
-
+        return [[1/(t12p)*1, 1/(t12p)*r12p],[(1/(t12p))*r12p, 1/(t12p)*1]]
