@@ -13,6 +13,7 @@ def graph_j(J):
     x = J[0]*np.exp(-1j*phi)
     y = J[1]*np.exp(-1j*phi)
 
+
     dr = [i for i in range(2)]
     dr = [x[1] -x[0] , y[1] - y[0]]
     dr = (dr/np.linalg .norm(dr, 2))*0.5
@@ -47,13 +48,15 @@ def polariseur(phi):
 
 #trouve le psi(l'angle) et delta (différence de phase) d'un vecteur de Jones
 def psidelta_j(J):
+
     E_0 = np.dot(J, J)
     E_0x = np.linalg.norm(J[0])
     E_0y = np.linalg.norm(J[1])
-    psi = np.pi/2
+    #psi = np.pi/2
 
-    if E_0x == 0:
-        psi = math.atan(E_0y/E_0x)
+    #if E_0x == 0:
+    
+    psi = math.atan(E_0y/E_0x)
 
     delta = np.angle(J[1]/J[0])
 
