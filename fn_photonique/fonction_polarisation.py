@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 
 #Graph le vecteur de Jones donné
 def graph_j(J):
@@ -56,7 +55,7 @@ def psidelta_j(J):
 
     #if E_0x == 0:
     
-    psi = math.atan(E_0y/E_0x)
+    psi = np.arctan2(E_0y,E_0x)
 
     delta = np.angle(J[1]/J[0])
 
