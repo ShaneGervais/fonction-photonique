@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 #Graph le vecteur de Jones donné
 def graph_j(J):
@@ -13,12 +14,16 @@ def graph_j(J):
     y = J[1]*np.exp(-1j*phi)
 
 
-    dr = [i for i in range(2)]
+    """dr = [i for i in range(2)]
     dr = [x[1] -x[0] , y[1] - y[0]]
     dr = (dr/np.linalg .norm(dr, 2))*0.5
+    """
+    dr = np.array([x[1], y[1]]) - np.array([x[0], y[0]])
+    dr = dr / np.linalg.norm(dr) * 0.5
 
     plt.plot(np.real(x), np.real(y))
-    plt.quiver(np.real(x[1]), np.real(y[1]), dr[0], dr[1])
+    plt.quiver((x[0]), (y[0]), dr[0], dr[1])
+    plt.axis([-1, 1, -1, 1])
     plt.show()
 
 #fonction qui trouve les vecteurs de jones à partir des paramètres theta et epsilon
@@ -91,34 +96,65 @@ def theta_epsilon_sens_j(J):
 
 #trace sur la sphère poincaré
 def trace_points_sphere_poincare(r):
-    N = np.size(r, 1)
+    # Create a 3D sphere plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_aspect('equal')
 
-    for i in range(N):
-        plt.scatter(r[i, 0], r[i, 1], r[i, 2])
+    # Create a sphere
+    u, v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
+    x = np.cos(u)*np.sin(v)
+    y = np.sin(u)*np.sin(v)
+    z = np.cos(v)
+
+    # Plot the sphere
+    #ax.plot_surface(x, y, z, color='b')
     
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.zlabel('Z')
-    plt.show()
+    # Get the number of rows in the matrix r
+    N = r.shape[0]
+    
+    # Plot each point in r as a red dot
+    for i in range(N):
+        ax.scatter(r[i, 0], r[i, 1], r[i, 2], s=50, c='r', marker='o')
+    
+    # Add labels to the axes
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    # Set the axes limits to ensure the sphere is plotted as a sphere, not an ellipsoid
+    max_range = np.array([x.max()-x.min(), y.max()-y.min(), z.max()-z.min()]).max()
+    x_mean = x.mean()
+    y_mean = y.mean()
+    z_mean = z.mean()
+    ax.set_xlim(x_mean - max_range/2, x_mean + max_range/2)
+    ax.set_ylim(y_mean - max_range/2, y_mean + max_range/2)
+    ax.set_zlim(z_mean - max_range/2, z_mean + max_range/2)
+    
 
 #Trouve X, Y et Z de la sphère
 def XYZ_poincare_j(J):
 
     theta, epsilon, sens = theta_epsilon_sens_j(J)
 
-    r = [i for i in range(2)]
+    # Initialize an array r with three elements
+    r = np.zeros(3)
+    
+    # Calculate the x, y, and z coordinates of the Poincare sphere
     r[0] = np.cos(2*theta)*np.cos(2*epsilon)
     r[1] = np.sin(2*theta)*np.cos(2*epsilon)
     r[2] = np.sin(2*epsilon)
-
+    
     return r
 
 #Trouve l'angle et l'éllipticité de la sphère
 def XYZ_poincare_theta_epsi(theta, epsilon):
     
-    r = [i for i in range(2)]
+    # Initialize an array r with three elements
+    r = np.zeros(3)
+    
+    # Calculate the x, y, and z coordinates of the Poincare sphere
     r[0] = np.cos(2*theta)*np.cos(2*epsilon)
     r[1] = np.sin(2*theta)*np.cos(2*epsilon)
     r[2] = np.sin(2*epsilon)
-
+    
     return r
